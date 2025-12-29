@@ -12,8 +12,19 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('sale_post_images', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->id('image_id');
+
+            $table->unsignedBigInteger('sale_id'); // ref: sale_posts.sale_id
+            $table->string('url', 2048);
+            $table->boolean('is_cover')->default(false);
+            $table->integer('sort_order')->default(0);
+
+            $table->dateTime('created_at')->useCurrent(); // chỉ có created_at (không có updated_at)
+
+            $table->foreign('sale_id')
+                ->references('id')
+                ->on('sale_posts')
+                ->onDelete('cascade');
         });
     }
 

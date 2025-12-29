@@ -12,8 +12,19 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('news_images', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->id('image_id');
+
+            $table->unsignedBigInteger('news_id'); // ref: news.news_id
+            $table->string('url', 2048);
+            $table->boolean('is_cover')->default(false);
+            $table->integer('sort_order')->default(0);
+
+            $table->dateTime('created_at')->useCurrent();
+
+            $table->foreign('news_id')
+                ->references('id')
+                ->on('news')
+                ->onDelete('cascade');
         });
     }
 
