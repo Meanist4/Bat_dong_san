@@ -22,10 +22,17 @@ class AuthController extends Controller
         ]);
 
         if (Auth::attempt($data)) {
-            return redirect('/dashboard');
+            $request->session()->regenerate();
+            if (Auth::user()->role === 'admin') {
+                return redirect()->route('admin.rent-posts.index');
+            }
+
+            return redirect()->route('home'); // hoặc rent-posts.index
         }
 
-        return back()->withErrors(['login' => 'Sai tài khoản hoặc mật khẩu']);
+        return back()->withErrors([
+            'login' => 'Sai tài khoản hoặc mật khẩu'
+        ]);
     }
 
     public function showRegister()
@@ -36,22 +43,29 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $data = $request->validate([
-            'full_name' => 'required',
+            'full_name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
-            'phone' => 'required|unique:users',
-            'password' => 'required|min:6'
+            'password' => 'required|confirmed|min:6',
         ]);
 
-        $data['password'] = Hash::make($data['password']);
+        User::create([
+            'name' => $data['full_name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+            'role' => 'user',
+            'status' => 1
+        ]);
 
-        User::create($data);
-
-        return redirect('/login');
+        return redirect()->route('login')->with('success', 'Đăng ký thành công');
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
         Auth::logout();
-        return redirect('/login');
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('login');
     }
 }
