@@ -39,7 +39,7 @@ class RentPostController extends Controller
             'description' => 'required|string|min:10',
         ], [
             'title.required' => 'Tiêu đề không được để trống',
-            'price.required' => 'Giá không được để trống',
+            'price' => 'required|numeric|min:0|max:9223372036854775807',
             'address.required' => 'Địa chỉ không được để trống',
             'description.required' => 'Mô tả không được để trống',
             'description.min' => 'Mô tả phải có ít nhất 10 ký tự',

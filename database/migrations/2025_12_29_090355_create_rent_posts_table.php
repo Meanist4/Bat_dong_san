@@ -17,7 +17,7 @@ return new class extends Migration
 
             $table->string('title', 200);
             $table->text('description')->nullable();
-            $table->decimal('price', 12, 2);
+            $table->bigInteger('price');
             $table->decimal('deposit', 12, 2)->nullable();
             $table->float('area')->nullable();
             $table->string('address')->nullable();

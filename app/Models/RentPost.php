@@ -20,7 +20,7 @@ class RentPost extends Model
         'price',
         'address',
         'description',
-        'status',
+        'status'
     ];
 
     protected $casts = [
