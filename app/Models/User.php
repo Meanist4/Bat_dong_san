@@ -14,6 +14,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',      // THÊM DÒNG NÀY
         'is_admin',
         'status',
     ];
@@ -27,14 +28,21 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
         'is_admin' => 'boolean',
+        'status'   => 'integer', // Ép kiểu để xử lý logic cho chính xác
     ];
 
-    // ✅ ADMIN CHECK – IDE + LARAVEL ĐỀU OK
+    /**
+     * Kiểm tra quyền Admin
+     */
     public function isAdmin(): bool
     {
-        return (bool) $this->is_admin;
+        // Kiểm tra qua is_admin HOẶC qua role (tùy theo logic bạn muốn dùng chính)
+        return (bool) $this->is_admin || $this->role === 'admin';
     }
 
+    /**
+     * Quan hệ với bài đăng
+     */
     public function rentPosts()
     {
         return $this->hasMany(RentPost::class);
