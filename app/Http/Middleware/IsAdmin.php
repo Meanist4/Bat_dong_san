@@ -15,7 +15,7 @@ class IsAdmin
         }
 
         if (Auth::user()->role !== 'admin') {
-            abort(403, 'Chỉ user thường mới được truy cập');
+            abort(403, 'Chỉ admin mới được truy cập');
         }
 
         return $next($request);
